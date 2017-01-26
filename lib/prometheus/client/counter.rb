@@ -1,11 +1,11 @@
 # encoding: UTF-8
 
-require 'prometheus/client/metric'
+require 'prometheus/client/process_shared_metric'
 
 module Prometheus
   module Client
     # Counter is a metric that exposes merely a sum or tally of things.
-    class Counter < Metric
+    class Counter < ProcessSharedMetric
       def type
         :counter
       end
@@ -14,7 +14,7 @@ module Prometheus
         raise ArgumentError, 'increment must be a non-negative number' if by < 0
 
         label_set = label_set_for(labels)
-        synchronize { @values[label_set] += by }
+        @values[label_set] += by
       end
 
       private
